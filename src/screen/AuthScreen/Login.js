@@ -47,6 +47,7 @@ const Login = ({navigation}) => {
     };
     dispatch(
       updateUserProfile(data, cbSuccess, cbFailure),
+      // loginRequest(data, cbSuccess, cbFailure),
       // console.log('res', data),
     );
   };

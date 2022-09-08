@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "114181680616",
+    "project_id": "sociallogintest-a0303",
+    "storage_bucket": "sociallogintest-a0303.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114181680616:android:571d0cd3c0ead8d1f0885d",
+        "android_client_info": {
+          "package_name": "com.reduxsaga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114181680616-8bchr3huhdd4ejlrhu0g00pcra95anao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtsfvJNDGrv6D2YCL2P20K1f3EL-9P9Wk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114181680616-8bchr3huhdd4ejlrhu0g00pcra95anao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
