@@ -1,6 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Button, Image} from 'react-native';
-import {LoginManager, LoginBehavior} from 'react-native-fbsdk-next';
+import {
+  LoginManager,
+  LoginButton,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk-next';
 import {
   GoogleSignin,
   statusCodes,
@@ -8,15 +14,17 @@ import {
 import {styles} from './styles';
 const GoogleLogin = () => {
   const [data, setData] = useState();
+  const [edit, setEdit] = useState();
+
   useEffect(() => {
     GoogleSignin.configure();
   }, []);
 
+  //gooleLogin
   const gooleLogin = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('userInfo', userInfo);
       setData(userInfo);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -34,19 +42,28 @@ const GoogleLogin = () => {
       }
     }
   };
-  console.log('data', data?.user);
+  // console.log('data', data?.user);
 
+  //facebookLogin
   const facebookLogin = () => {
-    LoginManager.logInWithPermissions(['public_profile']).then(
-      LoginManager.setLoginBehavior('web_only'),
-      function (result) {
-        if (result.isCancelled) {
-          console.log('Login cancelled');
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+      // LoginManager.setLoginBehavior('web_only'),
+      function (result, error) {
+        if (error) {
+          alert('login has error: ' + result.error);
+        } else if (result.isCancelled) {
+          alert('login is cancelled.');
         } else {
-          console.log(
-            'Login success with permissions: ' +
-              result.grantedPermissions.toString(),
-          );
+          AccessToken.getCurrentAccessToken().then(data => {
+            const infoRequest = new GraphRequest(
+              '/me?fields=name,picture',
+              null,
+              _responseInfoCallback,
+            );
+            // Start the graph request.
+            new GraphRequestManager().addRequest(infoRequest).start();
+            console.log('result', data);
+          });
         }
       },
       function (error) {
@@ -54,6 +71,19 @@ const GoogleLogin = () => {
       },
     );
   };
+
+  const _responseInfoCallback = (error, result) => {
+    if (error) {
+      alert('Error fetching data: ' + error.toString());
+    } else {
+      alert('Result Name: ' + result.name);
+      console.log('result===================', result.name);
+      setEdit(result);
+    }
+  };
+
+  console.log('edit----------', edit);
+  console.log('picture========================', edit?.picture.data.url);
 
   return (
     <View style={styles.container}>
@@ -90,15 +120,32 @@ const GoogleLogin = () => {
       >
         {data?.user.name}
       </Text>
+
+      <Image
+        source={{uri: data?.user.photo}}
+        style={{
+          height: 150,
+          width: 150,
+        }}
+      />
+      <Button title="Facebook Login" onPress={() => facebookLogin()} />
+
       <Text
         style={{
-          fontSize: 20,
+          fontSize: 50,
           color: 'black',
         }}
       >
-        {data?.user.photo}
+        {edit?.name}
       </Text>
-      <Button title="Facebook Login" onPress={() => facebookLogin()} />
+      <Image
+        source={{uri: edit?.picture.data.url}}
+        style={{
+          height: 250,
+          width: 250,
+          // backgroundColor: 'red',
+        }}
+      />
     </View>
   );
 };

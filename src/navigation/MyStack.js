@@ -5,16 +5,17 @@ import HomeScreen from '../screen/HomeScreen/HomeScreen';
 import DetailScreen from '../screen/DetailScreen/DetailScreen';
 import Login from '../screen/AuthScreen/Login';
 import {GoogleLogin} from '../screen/GoogleLogin/GoogleLogin';
-
+import {PushNotification} from '../screen/PushNotification/PushNotification';
 const AppStack = createStackNavigator();
 
 const MainAppNav = () => {
   return (
     <NavigationContainer>
       <AppStack.Navigator
-        initialRouteName="GoogleLogin"
+        initialRouteName="PushNotification"
         screenOptions={{headerShown: false}}
       >
+        <AppStack.Screen name="PushNotification" component={PushNotification} />
         <AppStack.Screen name="GoogleLogin" component={GoogleLogin} />
         <AppStack.Screen name="Login" component={Login} />
         <AppStack.Screen name={'Home'} component={HomeScreen} />
